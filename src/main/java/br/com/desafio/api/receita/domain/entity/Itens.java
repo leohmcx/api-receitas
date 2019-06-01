@@ -35,23 +35,28 @@ public class Itens {
 
 	@Column(name = "qtde_item")
 	@JsonProperty(value = "qtde_item")
-	private int qtdeItem;
+	private String qtdeItem;
+	
+	@Column(name = "medida")
+	@JsonProperty(value = "medida")
+	private String medida;
 
-	public Itens(Receita itensReceita, Ingrediente itensIngrediente, int qtdeItem) {
+	public Itens(Receita itensReceita, Ingrediente itensIngrediente, String qtdeItem, String medida) {
 		this.itensReceita = itensReceita;
 		this.itensIngrediente = itensIngrediente;
 		this.qtdeItem = qtdeItem;
+		this.medida = medida;
 		this.id = new ItensId(itensReceita.getId(), itensIngrediente.getId());
 	}
 
 	public Itens() {
 	}
 
-	public int getQtdeItem() {
+	public String getQtdeItem() {
 		return qtdeItem;
 	}
 
-	public void setQtdeItem(int qtdeItem) {
+	public void setQtdeItem(String qtdeItem) {
 		this.qtdeItem = qtdeItem;
 	}
 

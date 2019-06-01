@@ -17,14 +17,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "Receita")
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Receita {
 
 	@Id
@@ -32,10 +32,15 @@ public class Receita {
 	@Column(name = "id")
 	@JsonProperty(value = "id")
 	private long id;
+	
+	@Column(name = "nome")
+	@JsonProperty(value = "nome")
+	private String nome;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "categoria_id")
-	@JsonBackReference(value = "categoria-receita")
+	@JsonIgnore
+	@JsonManagedReference(value = "categoria-receita")
 	private Categoria categoria;
 
 	@Column(name = "tempo_preparo")
@@ -61,6 +66,14 @@ public class Receita {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public Categoria getCategoria() {
@@ -95,8 +108,8 @@ public class Receita {
 		this.modoPreparo = modoPreparo;
 	}
 
-	public void addIngrediente(Ingrediente ingrediente, int qtdeItem) {
-		Itens itens = new Itens(this, ingrediente, qtdeItem);
+	public void addIngrediente(Ingrediente ingrediente, String qtdeItem, String medida) {
+		Itens itens = new Itens(this, ingrediente, qtdeItem, medida);
 		this.ingredientes.add(itens);
 		ingrediente.getReceitas().add(itens);
 	}
@@ -134,13 +147,15 @@ public class Receita {
 			return false;
 
 		Receita that = (Receita) o;
-		return Objects.equals(tempoPreparo, that.tempoPreparo) && Objects.equals(rendimento, that.rendimento)
-				&& Objects.equals(modoPreparo, that.modoPreparo);
+		return Objects.equals(tempoPreparo, that.tempoPreparo) && 
+				Objects.equals(rendimento, that.rendimento) && 
+				Objects.equals(nome, that.nome) &&
+				Objects.equals(modoPreparo, that.modoPreparo);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(tempoPreparo, rendimento, modoPreparo);
+		return Objects.hash(tempoPreparo, rendimento, nome, modoPreparo);
 	}
 
 }
