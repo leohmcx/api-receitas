@@ -1,5 +1,7 @@
 # api-receitas
 
+![Alt Text](https://github.com/leohmcx/api-receitas/blob/master/logico.jpg)
+
 ```
 (GET)
 http://localhost:8080/api/v1/receita/{nome}
