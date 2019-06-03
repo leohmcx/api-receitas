@@ -22,22 +22,22 @@ public class ReceitaController {
 	@Autowired
 	private ReceitaService receitaService;
 	
-	@GetMapping(path = "/{nome}")
+	@GetMapping(path = "/{nome}", produces = "application/json")
 	public Iterable<Receita> findByNomeContaining(@PathVariable("nome") String nome) {
 		return receitaService.findByNomeContaining(nome);
 	}
 	
-	@GetMapping(path = "/categoria/{nome}")
+	@GetMapping(path = "/categoria/{nome}", produces = "application/json")
 	public Iterable<Receita> findByCategoria(@PathVariable("nome") String nome) {
 		return receitaService.findByCategoria(nome);
 	}
 	
-	@GetMapping(path = "/ingrediente/{nome}")
+	@GetMapping(path = "/ingrediente/{nome}", produces = "application/json")
 	public Iterable<Receita> findByIngrediente(@PathVariable("nome") String nome) {
 		return receitaService.findByIngrediente(nome);
 	}
 
-	@PostMapping(consumes = "application/json")
+	@PostMapping(consumes = "application/json", produces = "application/json")
 	public Receita add(@RequestBody Receita receita) {
 		return receitaService.add(receita);
 	}

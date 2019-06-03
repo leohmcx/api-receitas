@@ -27,7 +27,7 @@ public class Itens {
 	@JsonBackReference(value = "receita-itens")
 	private Receita itensReceita;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("itensIngredienteId")
 	@JsonIgnore
 	@JsonManagedReference(value = "ingrediente-itens")

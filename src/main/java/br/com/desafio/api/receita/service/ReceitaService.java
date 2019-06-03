@@ -63,49 +63,45 @@ public class ReceitaService {
 		
 		List<Ingrediente> ingredientes = new ArrayList<>();
 		HashMap<Long, String> controleQuantidade = new HashMap<>();
-		HashMap<Long, String> controleMedida = new HashMap<>();
-		
+		HashMap<Long, String> controleMedida = new HashMap<>();		
 		
 		if (receitaRepository.exists(id)) {
 			if (ingrediente == null && qtde == null && medida == null) {
+				
 				ingredientes = ingredienteRepository.findIngredientesByReceitaId(id);
 				controleQuantidade = buscaQtdeItem(id, ingredientes);
 				controleMedida = buscaMedidaItem(id, ingredientes);
-				removeItem(id, ingredientes, controleQuantidade, controleMedida);
+				addAndRemoveItem(id, ingredientes, controleQuantidade, controleMedida);
+				
 				Categoria categoria = categoriaRepository.findByNomeContaining(receita.getCategoria().getNome());
+				
 				if (categoria == null) {
 					categoria = new Categoria();
 					categoria.setNome(receita.getCategoria().getNome());
-					categoriaRepository.save(categoria);
+					categoria = categoriaRepository.save(categoria);
 				}
 
 				receita.setId(id);
 				receitaRepository.save(receita);
 
-				addItem(id, ingredientes, controleQuantidade, controleMedida);
+				addAndRemoveItem(id, ingredientes, controleQuantidade, controleMedida);
 				receita.setCategoria(categoria);
 			} else {
 				Ingrediente i = ingredienteRepository.findByNomeContaining(ingrediente);
+				
 				if(i == null) {
 					i = new Ingrediente();
 					i.setNome(ingrediente);
 					i = ingredienteRepository.save(i);
-					
-					ingredientes.add(i);
-					controleQuantidade.put(i.getId(), qtde);
-					controleMedida.put(i.getId(), medida);
-															
-					addItem(id, ingredientes, controleQuantidade, controleMedida);
-				} else {
-					ingredientes.add(i);
-					controleQuantidade.put(i.getId(), qtde);
-					controleMedida.put(i.getId(), medida);
-					removeItem(id, ingredientes, controleQuantidade, controleMedida);
-					addItem(id, ingredientes, controleQuantidade, controleMedida);
 				}
+				
+				ingredientes.add(i);
+				controleQuantidade.put(i.getId(), qtde);
+				controleMedida.put(i.getId(), medida);															
+				addAndRemoveItem(id, ingredientes, controleQuantidade, controleMedida);
 			}
 		}
-		return receita;
+		return receitaRepository.findOne(id);
 	}
 
 	private HashMap<Long, String> buscaQtdeItem(Long id, List<Ingrediente> itens) {
@@ -124,24 +120,16 @@ public class ReceitaService {
 		return controle;
 	}
 
-	private void removeItem(Long id, List<Ingrediente> itens, HashMap<Long, String> qtde, HashMap<Long, String> med) {
+	private void addAndRemoveItem(Long id, List<Ingrediente> itens, HashMap<Long, String> qtde, HashMap<Long, String> med) {
 		Receita receita = receitaRepository.findOne(id);
 		for (Ingrediente item : itens) {
 			if (item != null) {
 				if (receita.hasIngrediente(item)) {
 					receita.removeIngrediente(item);
-				}
-				receitaRepository.flush();
-			}
-		}
-	}
-
-	private void addItem(Long id, List<Ingrediente> itens, HashMap<Long, String> qtde, HashMap<Long, String> med) {
-		Receita receita = receitaRepository.findOne(id);
-		for (Ingrediente item : itens) {
-			if (item != null) {
-				if (!receita.hasIngrediente(item)) {
-					receita.addIngrediente(item, qtde.get(item.getId()), med.get(item.getId()));
+				} else {
+					if (!receita.hasIngrediente(item)) {
+						receita.addIngrediente(item, qtde.get(item.getId()), med.get(item.getId()));
+					}
 				}
 				receitaRepository.flush();
 			}
