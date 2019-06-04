@@ -22,12 +22,12 @@ public class Itens {
 	@EmbeddedId
 	private ItensId id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("itensReceitaId")
 	@JsonBackReference(value = "receita-itens")
 	private Receita itensReceita;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("itensIngredienteId")
 	@JsonIgnore
 	@JsonManagedReference(value = "ingrediente-itens")

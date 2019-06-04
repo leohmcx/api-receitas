@@ -35,7 +35,15 @@ public class Ingrediente {
 
 	@Column(name = "nome")
 	@JsonProperty(value = "nome")
-	private String nome;
+	private String nome;	
+	
+	public Ingrediente() {
+		
+	}
+	
+	public Ingrediente(String nome) {
+		this.nome = nome;
+	}
 
 	public long getId() {
 		return id;

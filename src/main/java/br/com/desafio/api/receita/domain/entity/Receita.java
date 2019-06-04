@@ -37,7 +37,7 @@ public class Receita {
 	@JsonProperty(value = "nome")
 	private String nome;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "categoria_id")
 	@JsonIgnore
 	@JsonManagedReference(value = "categoria-receita")
@@ -51,11 +51,11 @@ public class Receita {
 	@JsonProperty(value = "rendimento")
 	private int rendimento;
 
-	@Column(name = "modo_preparo")
+	@Column(name = "modo_preparo", length = 2550)
 	@JsonProperty(value = "modo_preparo")
 	private String modoPreparo;
 
-	@OneToMany(mappedBy = "itensReceita", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "itensReceita", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	// @JsonIgnore
 	@JsonManagedReference(value = "receita-itens")
 	private List<Itens> ingredientes = new ArrayList<>();

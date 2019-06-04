@@ -27,23 +27,14 @@ public class Application {
 
 		return args -> {
 			// Categoria inicio
-			Categoria c1 = new Categoria();
-			Categoria c2 = new Categoria();
-			Categoria c3 = new Categoria();
-			Categoria c4 = new Categoria();
-			Categoria c5 = new Categoria();
-			Categoria c6 = new Categoria();
-			Categoria c7 = new Categoria();
-			Categoria c8 = new Categoria();
-			
-			c1.setNome("ACOMPANHAMENTOS");
-			c2.setNome("APERITIVOS");
-			c3.setNome("ENTRADAS");
-			c4.setNome("LANCHES");
-			c5.setNome("MOLHOS");
-			c6.setNome("PRINCIPAL");
-			c7.setNome("SALADAS");
-			c8.setNome("SOBREMESAS");
+			Categoria c1 = new Categoria("ACOMPANHAMENTOS");
+			Categoria c2 = new Categoria("APERITIVOS");
+			Categoria c3 = new Categoria("ENTRADAS");
+			Categoria c4 = new Categoria("LANCHES");
+			Categoria c5 = new Categoria("MOLHOS");
+			Categoria c6 = new Categoria("PRINCIPAL");
+			Categoria c7 = new Categoria("SALADAS");
+			Categoria c8 = new Categoria("SOBREMESAS");
 			
 			/**Persistencia*/
 			categoriaRepository.save(c1);
@@ -56,17 +47,25 @@ public class Application {
 			categoriaRepository.save(c8);
 			// Categoria fim
 			
-			Ingrediente i1 = new Ingrediente();
-			Ingrediente i2 = new Ingrediente();
-			Ingrediente i3 = new Ingrediente();
-			
-			i1.setNome("OVO");
-			i2.setNome("FARINHA");
-			i3.setNome("LEITE");
-			
+			Ingrediente i1 = new Ingrediente("ÓLEO");
+			Ingrediente i2 = new Ingrediente("CENOURA");
+			Ingrediente i3 = new Ingrediente("OVO");
+			Ingrediente i4 = new Ingrediente("AÇÚCAR");
+			Ingrediente i5 = new Ingrediente("FARINHA");
+			Ingrediente i6 = new Ingrediente("FERMENTO");
+			Ingrediente i7 = new Ingrediente("MANTEIGA");
+			Ingrediente i8 = new Ingrediente("CHOCOLATE");
+			Ingrediente i9 = new Ingrediente("LEITE");
+						
 			ingredienteRepository.save(i1);
 			ingredienteRepository.save(i2);
 			ingredienteRepository.save(i3);
+			ingredienteRepository.save(i4);
+			ingredienteRepository.save(i5);
+			ingredienteRepository.save(i6);
+			ingredienteRepository.save(i7);
+			ingredienteRepository.save(i8);
+			ingredienteRepository.save(i9);
 			
 			// Produto inicio
 			Receita r1 = new Receita();
@@ -76,7 +75,10 @@ public class Application {
 			r1.setTempoPreparo(40);
 			r1.setRendimento(8);
 			r1.setModoPreparo("1 - Em um liquidificador, adicione a cenoura, os ovos e o óleo, depois misture. "
-					+ "2 - Acrescente o açúcar e bata novamente por 5 minutos. ");
+					+ "2 - Acrescente o açúcar e bata novamente por 5 minutos. "
+					+ "3 - Em uma tigela ou na batedeira, adicione a farinha de trigo e depois misture novamente. "
+					+ "4 - Acrescente o fermento e misture lentamente com uma colher. "
+					+ "5 - Asse em um forno preaquecido a 180° C por aproximadamente 40 minutos.");
 			r1.setCategoria(c8);
 			/**Persistencia*/
 			receitaRepository.save(r1);
@@ -92,9 +94,15 @@ public class Application {
 			/**Persistencia*/
 			receitaRepository.save(r2);
 			
-			r1.addIngrediente(i1, "2", "Unidades");
-			r1.addIngrediente(i2, "3", "Xícaras");
-			r1.addIngrediente(i3, "2", "Colheres");
+			r1.addIngrediente(i1, "1/2", "Xícara (chá)");
+			r1.addIngrediente(i2, "3", "Unidades raladas");
+			r1.addIngrediente(i3, "4", "Unidades");
+			r1.addIngrediente(i4, "3", "Xícara (chá)");
+			r1.addIngrediente(i5, "2 e 1/2", "Xícara (chá)");
+			r1.addIngrediente(i6, "1", "Colher (sopa)");
+			r1.addIngrediente(i7, "1", "Colher (sopa)");
+			r1.addIngrediente(i8, "3", "Colheres (sopa)");
+			r1.addIngrediente(i9, "1", "Xícara (chá)");
 			receitaRepository.save(r1);
 		};
 	}

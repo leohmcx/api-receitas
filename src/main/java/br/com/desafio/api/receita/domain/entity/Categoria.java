@@ -33,7 +33,15 @@ public class Categoria {
 
 	@OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonBackReference(value = "categoria-receita")
-	private List<Receita> receita;
+	private List<Receita> receita;	
+
+	public Categoria() {
+		
+	}
+	
+	public Categoria(String nome) {
+		this.nome = nome;
+	}
 
 	public long getId() {
 		return id;

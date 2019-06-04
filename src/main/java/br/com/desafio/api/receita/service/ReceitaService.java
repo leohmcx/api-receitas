@@ -32,9 +32,8 @@ public class ReceitaService {
 	
 	public Iterable<Receita> findByCategoria(String nome) {
 		Categoria categoria = categoriaRepository.findByNomeContaining(nome);
-		if(categoria == null) {
+		if(categoria == null)
 			return null;
-		}
 		return receitaRepository.findByCategoria_id(categoria.getId());
 	}
 	
@@ -44,57 +43,45 @@ public class ReceitaService {
 
 	public Receita add(Receita receita) {
 		Categoria categoria = categoriaRepository.findByNomeContaining(receita.getCategoria().getNome());		
-		if (categoria == null) {
-			categoria = new Categoria();
-			categoria.setNome(receita.getCategoria().getNome());
-			categoriaRepository.save(categoria);
-		}
+		if (categoria == null) 
+			categoria = addCategoria(receita.getCategoria().getNome());
 		receita.setCategoria(categoria);
 		return receitaRepository.save(receita);
 	}
 
 	public void delete(long id) {
-		if (receitaRepository.exists(id)) {
+		if (receitaRepository.exists(id))
 			receitaRepository.delete(id);
-		}
 	}
 
-	public Receita update(long id, Receita receita, String ingrediente, String qtde, String medida) {
-		
+	public Receita update(long id, Receita receita, String ingrediente, String qtde, String medida) {		
 		List<Ingrediente> ingredientes = new ArrayList<>();
 		HashMap<Long, String> controleQuantidade = new HashMap<>();
 		HashMap<Long, String> controleMedida = new HashMap<>();		
 		
-		if (receitaRepository.exists(id)) {
+		if (receitaRepository.exists(id)) { 
+			// alterar receita mantendo o relacionamento.
 			if (ingrediente == null && qtde == null && medida == null) {
 				
 				ingredientes = ingredienteRepository.findIngredientesByReceitaId(id);
 				controleQuantidade = buscaQtdeItem(id, ingredientes);
-				controleMedida = buscaMedidaItem(id, ingredientes);
-				addAndRemoveItem(id, ingredientes, controleQuantidade, controleMedida);
+				controleMedida = buscaMedidaItem(id, ingredientes);				
 				
-				Categoria categoria = categoriaRepository.findByNomeContaining(receita.getCategoria().getNome());
+				Categoria c = categoriaRepository.findByNomeContaining(receita.getCategoria().getNome());
 				
-				if (categoria == null) {
-					categoria = new Categoria();
-					categoria.setNome(receita.getCategoria().getNome());
-					categoria = categoriaRepository.save(categoria);
-				}
-
+				if (c == null) 
+					c = addCategoria(receita.getCategoria().getNome());
+				receita.setCategoria(c);
 				receita.setId(id);
 				receitaRepository.save(receita);
-
-				addAndRemoveItem(id, ingredientes, controleQuantidade, controleMedida);
-				receita.setCategoria(categoria);
-			} else {
+				
+				addAndRemoveItem(id, ingredientes, controleQuantidade, controleMedida);				
+			} else { 
+				// add ou remove ingrediente
 				Ingrediente i = ingredienteRepository.findByNomeContaining(ingrediente);
 				
-				if(i == null) {
-					i = new Ingrediente();
-					i.setNome(ingrediente);
-					i = ingredienteRepository.save(i);
-				}
-				
+				if(i == null) 
+					i = addIngrediente(ingrediente);								
 				ingredientes.add(i);
 				controleQuantidade.put(i.getId(), qtde);
 				controleMedida.put(i.getId(), medida);															
@@ -102,6 +89,14 @@ public class ReceitaService {
 			}
 		}
 		return receitaRepository.findOne(id);
+	}
+	
+	private Categoria addCategoria(String nome) {
+		return categoriaRepository.save(new Categoria(nome));
+	}
+	
+	private Ingrediente addIngrediente(String nome) {
+		return ingredienteRepository.save(new Ingrediente(nome));
 	}
 
 	private HashMap<Long, String> buscaQtdeItem(Long id, List<Ingrediente> itens) {
